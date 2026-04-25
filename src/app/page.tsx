@@ -91,8 +91,8 @@ export default function HomePage() {
           }} />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative z-10 max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 py-32 lg:py-40">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
             <div>
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
@@ -221,25 +221,25 @@ export default function HomePage() {
       {/* ===== SERVICES SECTION ===== */}
       <section className="py-24 bg-surface relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] -translate-x-1/2" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
             <motion.span variants={fadeUp} custom={0} className="text-accent text-sm font-semibold tracking-widest uppercase">
               Our Services
             </motion.span>
-            <motion.h2 variants={fadeUp} custom={1} className="text-4xl sm:text-5xl font-heading font-bold mt-4 mb-6">
+            <motion.h2 variants={fadeUp} custom={1} className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mt-6 mb-8">
               Crafting Beautiful <span className="gold-text">Interiors</span>
             </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="text-text-muted max-w-2xl mx-auto">
+            <motion.p variants={fadeUp} custom={2} className="text-lg text-text-muted max-w-2xl mx-auto leading-relaxed">
               From initial concept to final styling, our expert design team brings your vision to life with meticulous attention to detail.
             </motion.p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-10 lg:gap-12">
             {services.map((service, i) => (
               <motion.div
                 key={service.title}
@@ -249,13 +249,13 @@ export default function HomePage() {
                 variants={fadeUp}
                 custom={i}
                 whileHover={{ y: -8 }}
-                className="group p-8 rounded-3xl bg-white border border-black/5 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-accent/10 transition-all duration-500"
+                className="group p-10 lg:p-12 rounded-[2.5rem] bg-white border border-black/5 shadow-xl shadow-black/5 hover:shadow-2xl hover:shadow-accent/10 transition-all duration-500"
               >
-                <div className="w-16 h-16 rounded-2xl gold-gradient flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-16 h-16 rounded-2xl gold-gradient flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform duration-300">
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-heading font-bold mb-3">{service.title}</h3>
-                <p className="text-text-muted leading-relaxed">{service.desc}</p>
+                <h3 className="text-2xl font-heading font-bold mb-4">{service.title}</h3>
+                <p className="text-text-muted leading-[1.8] text-lg">{service.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -265,25 +265,25 @@ export default function HomePage() {
       {/* ===== FEATURED PRODUCTS ===== */}
       <section className="py-24 bg-primary relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-accent/5 blur-[120px] translate-x-1/3" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-16 gap-4"
+            className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-20 gap-8"
           >
             <div>
               <motion.span variants={fadeUp} custom={0} className="text-accent text-sm font-semibold tracking-widest uppercase">
                 Curated Collection
               </motion.span>
-              <motion.h2 variants={fadeUp} custom={1} className="text-4xl sm:text-5xl font-heading font-bold text-text-light mt-4">
+              <motion.h2 variants={fadeUp} custom={1} className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-text-light mt-6">
                 Featured <span className="gold-text">Products</span>
               </motion.h2>
             </div>
             <motion.div variants={fadeUp} custom={2}>
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2 text-accent hover:text-accent-light transition-colors font-medium"
+                className="inline-flex items-center gap-2 text-accent hover:text-accent-light transition-colors font-medium text-lg pb-2 border-b-2 border-transparent hover:border-accent"
               >
                 View All Products
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +293,7 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
             {featured.map((product, i) => (
               <motion.div
                 key={product.id}
@@ -334,22 +334,22 @@ export default function HomePage() {
 
       {/* ===== TESTIMONIALS ===== */}
       <section className="py-24 bg-surface relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
             <motion.span variants={fadeUp} custom={0} className="text-accent text-sm font-semibold tracking-widest uppercase">
               Testimonials
             </motion.span>
-            <motion.h2 variants={fadeUp} custom={1} className="text-4xl sm:text-5xl font-heading font-bold mt-4">
+            <motion.h2 variants={fadeUp} custom={1} className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mt-6">
               What Our Clients <span className="gold-text">Say</span>
             </motion.h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-10 lg:gap-12">
             {testimonials.map((t, i) => (
               <motion.div
                 key={t.name}
@@ -358,23 +358,25 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 variants={fadeUp}
                 custom={i}
-                className="p-8 rounded-3xl bg-white border border-black/5 shadow-lg shadow-black/5"
+                className="p-10 lg:p-12 rounded-[2.5rem] bg-white border border-black/5 shadow-xl shadow-black/5 flex flex-col justify-between"
               >
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <svg key={j} className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+                <div>
+                  <div className="flex gap-1 mb-8">
+                    {Array.from({ length: t.rating }).map((_, j) => (
+                      <svg key={j} className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-text-muted leading-[1.8] text-lg mb-10 italic">&ldquo;{t.text}&rdquo;</p>
                 </div>
-                <p className="text-text-muted leading-relaxed mb-6 italic">&ldquo;{t.text}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-primary font-bold text-sm">
+                <div className="flex items-center gap-4 mt-auto">
+                  <div className="w-14 h-14 rounded-full gold-gradient flex items-center justify-center text-primary font-bold text-xl">
                     {t.name[0]}
                   </div>
                   <div>
-                    <div className="font-semibold text-sm">{t.name}</div>
-                    <div className="text-text-muted text-xs">{t.role}</div>
+                    <div className="font-semibold text-lg">{t.name}</div>
+                    <div className="text-text-muted text-sm">{t.role}</div>
                   </div>
                 </div>
               </motion.div>
@@ -384,32 +386,32 @@ export default function HomePage() {
       </section>
 
       {/* ===== CTA SECTION ===== */}
-      <section className="py-24 bg-primary relative overflow-hidden">
+      <section className="py-32 lg:py-40 bg-primary relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-accent/5 blur-[150px]" />
         </div>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+        <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 relative text-center">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.h2 variants={fadeUp} custom={0} className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-text-light mb-6">
+            <motion.h2 variants={fadeUp} custom={0} className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold text-text-light mb-8 leading-[1.1]">
               Ready to Transform
               <br />
               <span className="gold-text">Your Space?</span>
             </motion.h2>
-            <motion.p variants={fadeUp} custom={1} className="text-lg text-text-light/50 max-w-2xl mx-auto mb-10">
+            <motion.p variants={fadeUp} custom={1} className="text-xl text-text-light/60 max-w-3xl mx-auto mb-14 leading-relaxed">
               Tell us about your room and let our experts craft a personalized design plan just for you. No commitments, just beautiful possibilities.
             </motion.p>
             <motion.div variants={fadeUp} custom={2}>
               <Link
                 href="/design-request"
-                className="inline-flex items-center gap-3 px-10 py-5 rounded-2xl gold-gradient text-primary font-bold text-lg hover:opacity-90 transition-all duration-300 shadow-2xl shadow-accent/30 pulse-glow"
+                className="inline-flex items-center gap-4 px-12 py-6 rounded-full gold-gradient text-primary font-bold text-xl hover:opacity-90 transition-all duration-300 shadow-2xl shadow-accent/30 pulse-glow"
               >
                 Request Your Design
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </motion.div>
