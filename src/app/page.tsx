@@ -67,19 +67,13 @@ const testimonials = [
 
 export default function HomePage() {
   const [featured, setFeatured] = useState<ProductType[]>([]);
-  const [activeCategory, setActiveCategory] = useState("All");
-  const filterCategories = ["All", "Decor", "Lighting", "Textiles", "Furniture"];
 
   useEffect(() => {
-    fetch("/api/products?featured=true&limit=20")
+    fetch("/api/products?featured=true&limit=4")
       .then((r) => r.json())
       .then((data) => setFeatured(data.products || []))
       .catch(() => {});
   }, []);
-
-  const displayProducts = featured
-    .filter(p => activeCategory === "All" ? true : p.category === activeCategory)
-    .slice(0, 5);
 
   return (
     <>
@@ -225,7 +219,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== SERVICES SECTION ===== */}
-      <section className="py-32 lg:py-40 bg-surface relative overflow-hidden">
+      <section className="py-48 lg:py-56 bg-surface relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] -translate-x-1/2" />
         <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
           <motion.div
@@ -269,122 +263,77 @@ export default function HomePage() {
       </section>
 
       {/* ===== FEATURED PRODUCTS ===== */}
-      <section className="py-32 lg:py-40 bg-[#F3F4F6] relative overflow-hidden">
+      <section className="py-48 lg:py-64 bg-primary relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-accent/5 blur-[120px] translate-x-1/3" />
         <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
-          
-          {/* Header & Filters */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="flex flex-col items-center text-center mb-16"
+            className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-20 gap-8"
           >
-            <motion.h2 variants={fadeUp} custom={0} className="text-4xl sm:text-5xl font-heading font-bold text-primary mb-4">
-              Curated Collection
-            </motion.h2>
-            <motion.p variants={fadeUp} custom={1} className="text-primary/60 max-w-2xl mx-auto mb-10 text-lg">
-              Discover our handpicked selection of artisanal decor, lighting, and textiles designed to elevate your living spaces with quiet luxury.
-            </motion.p>
-
-            <motion.div variants={fadeUp} custom={2} className="flex flex-wrap justify-center gap-3">
-              {filterCategories.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    activeCategory === cat 
-                    ? "bg-white text-primary shadow-sm" 
-                    : "bg-black/5 text-primary/60 hover:bg-black/10"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+            <div>
+              <motion.span variants={fadeUp} custom={0} className="text-accent text-sm font-semibold tracking-widest uppercase">
+                Curated Collection
+              </motion.span>
+              <motion.h2 variants={fadeUp} custom={1} className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-text-light mt-6">
+                Featured <span className="gold-text">Products</span>
+              </motion.h2>
+            </div>
+            <motion.div variants={fadeUp} custom={2}>
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-2 text-accent hover:text-accent-light transition-colors font-medium text-lg pb-2 border-b-2 border-transparent hover:border-accent"
+              >
+                View All Products
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
             </motion.div>
           </motion.div>
 
-          {/* Bento Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayProducts.map((product, i) => {
-              const isLarge = i === 0;
-              const badges = ["LIMITED EDITION", "ARTISAN MADE", "GALLERY PIECE", "NEW ARRIVAL", "BEST SELLER"];
-              const badge = badges[i % badges.length];
-
-              return (
-                <motion.div
-                  key={product.id}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeUp}
-                  custom={i}
-                  className={isLarge ? "lg:col-span-2 md:col-span-2" : "col-span-1"}
-                >
-                  <Link href={`/shop/${product.id}`} className="group block h-full">
-                    <div className={`h-full rounded-[2rem] bg-white overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-500 p-3 sm:p-4 flex ${isLarge ? "flex-col sm:flex-row gap-6 sm:gap-10" : "flex-col gap-4"}`}>
-                      
-                      {/* Image Container */}
-                      <div className={`relative rounded-3xl overflow-hidden bg-[#F8F9FA] ${isLarge ? "sm:w-1/2 aspect-square sm:aspect-auto sm:min-h-[400px]" : "w-full aspect-square"}`}>
-                        <img
-                          src={product.imageUrl}
-                          alt={product.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        />
-                        <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold tracking-wider text-primary uppercase">
-                            {badge}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Content Container */}
-                      <div className={`flex flex-col justify-between ${isLarge ? "sm:w-1/2 py-4 sm:py-8 pr-4 sm:pr-8" : "p-2 pb-4"}`}>
-                        <div>
-                          <span className="text-[10px] font-bold tracking-wider text-[#6366f1] uppercase mb-2 block">
-                            {product.category}
-                          </span>
-                          <h3 className={`font-heading font-semibold text-primary mb-2 ${isLarge ? "text-2xl sm:text-3xl" : "text-lg"}`}>
-                            {product.title}
-                          </h3>
-                          {isLarge && (
-                            <p className="text-primary/60 text-sm leading-relaxed mb-6 line-clamp-3">
-                              {product.description}
-                            </p>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center justify-between mt-4">
-                          <div className={`font-medium text-primary ${isLarge ? "text-xl" : "text-base"}`}>
-                            ${product.price.toFixed(2)}
-                          </div>
-                          <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-[#6366f1] group-hover:bg-[#6366f1] group-hover:text-white transition-colors duration-300">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+            {featured.map((product, i) => (
+              <motion.div
+                key={product.id}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                custom={i}
+                whileHover={{ y: -6 }}
+              >
+                <Link href={`/shop/${product.id}`} className="group block">
+                  <div className="rounded-2xl overflow-hidden bg-secondary/50 border border-white/5">
+                    <div className="aspect-square overflow-hidden">
+                      <img
+                        src={product.imageUrl}
+                        alt={product.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
                     </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          <div className="mt-16 text-center">
-            <Link
-              href="/shop"
-              className="inline-flex px-8 py-3 rounded-full bg-black/5 text-primary font-medium hover:bg-black/10 transition-colors"
-            >
-              Explore More Pieces
-            </Link>
+                    <div className="p-5">
+                      <span className="text-xs text-accent/70 font-medium tracking-wider uppercase">
+                        {product.category}
+                      </span>
+                      <h3 className="text-text-light font-heading font-semibold mt-1 mb-2 group-hover:text-accent transition-colors">
+                        {product.title}
+                      </h3>
+                      <div className="text-accent text-lg font-bold">
+                        ${product.price.toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ===== TESTIMONIALS ===== */}
-      <section className="pt-40 pb-32 lg:pt-48 lg:pb-40 bg-surface relative">
+      <section className="pt-48 pb-40 lg:pt-64 lg:pb-56 bg-surface relative">
         <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12">
           <motion.div
             initial="hidden"
@@ -437,7 +386,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== CTA SECTION ===== */}
-      <section className="py-40 lg:py-56 bg-primary relative overflow-hidden">
+      <section className="py-48 lg:py-64 bg-primary relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-accent/5 blur-[150px]" />
         </div>
