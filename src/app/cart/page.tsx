@@ -11,78 +11,15 @@ export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { data: session } = useSession();
   const router = useRouter();
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [address, setAddress] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
-
-  const handleCheckout = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCheckoutRedirect = () => {
     if (!session) {
-      router.push("/login");
+      router.push("/login?callbackUrl=/checkout");
       return;
     }
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
-          address,
-        }),
-      });
-
-      if (res.ok) {
-        clearCart();
-        setOrderPlaced(true);
-      } else {
-        const data = await res.json();
-        alert(data.error || "Failed to place order");
-      }
-    } catch {
-      alert("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
+    router.push("/checkout");
   };
 
-  if (orderPlaced) {
-    return (
-      <div className="min-h-screen pt-24 bg-surface flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center max-w-md mx-4"
-        >
-          <div className="w-24 h-24 rounded-full gold-gradient flex items-center justify-center mx-auto mb-8">
-            <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h1 className="text-3xl font-heading font-bold mb-4">Order Placed!</h1>
-          <p className="text-text-muted mb-8">
-            Thank you for your purchase. You can track your order in your dashboard.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link
-              href="/dashboard"
-              className="px-6 py-3 rounded-xl gold-gradient text-primary font-semibold hover:opacity-90 transition-all"
-            >
-              View Orders
-            </Link>
-            <Link
-              href="/shop"
-              className="px-6 py-3 rounded-xl border border-accent/30 text-accent font-semibold hover:bg-accent/5 transition-all"
-            >
-              Continue Shopping
-            </Link>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
+
 
   if (items.length === 0) {
     return (
@@ -218,46 +155,12 @@ export default function CartPage() {
                 </div>
               </div>
 
-              {!showCheckout ? (
-                <button
-                  onClick={() => {
-                    if (!session) {
-                      router.push("/login");
-                      return;
-                    }
-                    setShowCheckout(true);
-                  }}
-                  className="w-full py-4 rounded-xl gold-gradient text-primary font-semibold hover:opacity-90 transition-all shadow-lg shadow-accent/20"
-                >
-                  Proceed to Checkout
-                </button>
-              ) : (
-                <motion.form
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  onSubmit={handleCheckout}
-                  className="space-y-4"
-                >
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Shipping Address</label>
-                    <textarea
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      required
-                      rows={3}
-                      className="w-full px-4 py-3 rounded-xl border border-black/10 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-all resize-none text-sm"
-                      placeholder="Enter your full shipping address..."
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full py-4 rounded-xl gold-gradient text-primary font-semibold hover:opacity-90 disabled:opacity-50 transition-all shadow-lg shadow-accent/20"
-                  >
-                    {loading ? "Placing Order..." : `Place Order — $${grandTotal.toFixed(2)}`}
-                  </button>
-                </motion.form>
-              )}
+              <button
+                onClick={handleCheckoutRedirect}
+                className="w-full py-4 rounded-xl gold-gradient text-primary font-semibold hover:opacity-90 transition-all shadow-lg shadow-accent/20"
+              >
+                Proceed to Checkout
+              </button>
             </motion.div>
           </div>
         </div>

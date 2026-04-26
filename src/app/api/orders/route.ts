@@ -38,10 +38,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { items, address } = await request.json();
+    const { items, address, fullName, email, phone, notes } = await request.json();
 
-    if (!items || !items.length || !address) {
-      return NextResponse.json({ error: "Items and address are required" }, { status: 400 });
+    if (!items || !items.length || !address || !fullName || !email || !phone) {
+      return NextResponse.json({ error: "Required fields are missing" }, { status: 400 });
     }
 
     // Verify stock and calculate total
@@ -74,6 +74,10 @@ export async function POST(request: Request) {
           userId: session.user.id,
           totalAmount,
           address,
+          fullName,
+          email,
+          phone,
+          notes: notes || null,
           items: {
             create: orderItems,
           },

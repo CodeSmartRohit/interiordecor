@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProductType } from "@/types";
 
-const categories = ["Furniture", "Lighting", "Decor", "Wall Art", "Textiles"];
+type CategoryType = { id: string; name: string };
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -13,6 +13,11 @@ export default function AdminProductsPage() {
   const [editingProduct, setEditingProduct] = useState<ProductType | null>(null);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
+
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [savingCategory, setSavingCategory] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -36,8 +41,22 @@ export default function AdminProductsPage() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const data = await res.json();
+      setCategories(data || []);
+      if (data && data.length > 0 && !form.category) {
+        setForm((prev) => ({ ...prev, category: data[0].name }));
+      }
+    } catch {
+      console.error("Failed to fetch categories");
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const resetForm = () => {
@@ -95,8 +114,48 @@ export default function AdminProductsPage() {
       const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
       if (res.ok) {
         fetchProducts();
+        alert("Product deleted successfully!");
       } else {
         alert("Failed to delete product");
+      }
+    } catch {
+      alert("Something went wrong");
+    }
+  };
+
+  const handleAddCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCategoryName.trim()) return;
+    setSavingCategory(true);
+    try {
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newCategoryName }),
+      });
+      if (res.ok) {
+        setNewCategoryName("");
+        fetchCategories();
+        alert("Category added successfully!");
+      } else {
+        alert("Failed to add category");
+      }
+    } catch {
+      alert("Something went wrong");
+    } finally {
+      setSavingCategory(false);
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this category?")) return;
+    try {
+      const res = await fetch(`/api/categories/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        fetchCategories();
+        alert("Category deleted successfully!");
+      } else {
+        alert("Failed to delete category");
       }
     } catch {
       alert("Something went wrong");
@@ -118,15 +177,26 @@ export default function AdminProductsPage() {
         >
           Product <span className="gold-text">Management</span>
         </motion.h1>
-        <button
-          onClick={() => { resetForm(); setShowForm(true); }}
-          className="px-6 py-3 rounded-xl gold-gradient text-primary font-semibold hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center gap-2"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Add Product
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={() => setShowCategoryModal(true)}
+            className="px-6 py-3 rounded-xl border border-accent/30 text-accent font-semibold hover:bg-accent/10 transition-all shadow-lg shadow-accent/5 flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            Manage Categories
+          </button>
+          <button
+            onClick={() => { resetForm(); setShowForm(true); }}
+            className="px-6 py-3 rounded-xl gold-gradient text-primary font-semibold hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Product
+          </button>
+        </div>
       </div>
 
       {/* Search */}
@@ -181,7 +251,7 @@ export default function AdminProductsPage() {
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-text-light focus:outline-none focus:border-accent/50 transition-all"
                     >
                       {categories.map((c) => (
-                        <option key={c} value={c} className="bg-primary">{c}</option>
+                        <option key={c.id} value={c.name} className="bg-primary">{c.name}</option>
                       ))}
                     </select>
                   </div>
@@ -272,6 +342,76 @@ export default function AdminProductsPage() {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Categories Modal */}
+      <AnimatePresence>
+        {showCategoryModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={(e) => e.target === e.currentTarget && setShowCategoryModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-primary rounded-3xl border border-white/10 p-8 w-full max-w-md max-h-[90vh] flex flex-col"
+            >
+              <h2 className="text-xl font-heading font-bold text-text-light mb-6">Manage Categories</h2>
+
+              <form onSubmit={handleAddCategory} className="flex gap-2 mb-6">
+                <input
+                  type="text"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  placeholder="New Category Name"
+                  required
+                  className="flex-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-text-light placeholder-text-light/30 focus:outline-none focus:border-accent/50 transition-all"
+                />
+                <button
+                  type="submit"
+                  disabled={savingCategory}
+                  className="px-4 py-2 rounded-xl gold-gradient text-primary font-semibold hover:opacity-90 disabled:opacity-50 transition-all"
+                >
+                  Add
+                </button>
+              </form>
+
+              <div className="flex-1 overflow-y-auto space-y-2">
+                {categories.length === 0 ? (
+                  <p className="text-text-light/30 text-center py-4">No categories added yet.</p>
+                ) : (
+                  categories.map((category) => (
+                    <div key={category.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                      <span className="text-text-light font-medium">{category.name}</span>
+                      <button
+                        onClick={() => handleDeleteCategory(category.id)}
+                        className="p-2 rounded-lg text-text-light/40 hover:text-danger hover:bg-danger/10 transition-all"
+                        title="Delete Category"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div className="pt-6 mt-4 border-t border-white/10">
+                <button
+                  onClick={() => setShowCategoryModal(false)}
+                  className="w-full py-3 rounded-xl border border-white/10 text-text-light hover:bg-white/5 transition-all"
+                >
+                  Close
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
