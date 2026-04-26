@@ -219,7 +219,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== SERVICES SECTION ===== */}
-      <section className="py-24 bg-surface relative overflow-hidden">
+      <section className="py-32 lg:py-40 bg-surface relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] -translate-x-1/2" />
         <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
           <motion.div
@@ -263,7 +263,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== FEATURED PRODUCTS ===== */}
-      <section className="py-24 bg-primary relative overflow-hidden">
+      <section className="py-32 lg:py-40 bg-primary relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-accent/5 blur-[120px] translate-x-1/3" />
         <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 relative">
           <motion.div
@@ -333,7 +333,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== TESTIMONIALS ===== */}
-      <section className="py-24 bg-surface relative">
+      <section className="pt-40 pb-32 lg:pt-48 lg:pb-40 bg-surface relative">
         <div className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12">
           <motion.div
             initial="hidden"
@@ -386,7 +386,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== CTA SECTION ===== */}
-      <section className="py-32 lg:py-40 bg-primary relative overflow-hidden">
+      <section className="py-40 lg:py-56 bg-primary relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-accent/5 blur-[150px]" />
         </div>
@@ -395,13 +395,14 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            className="flex flex-col items-center gap-12"
           >
-            <motion.h2 variants={fadeUp} custom={0} className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold text-text-light mb-8 leading-[1.1]">
+            <motion.h2 variants={fadeUp} custom={0} className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold text-text-light leading-[1.1]">
               Ready to Transform
               <br />
               <span className="gold-text">Your Space?</span>
             </motion.h2>
-            <motion.p variants={fadeUp} custom={1} className="text-xl text-text-light/60 max-w-3xl mx-auto mb-14 leading-relaxed">
+            <motion.p variants={fadeUp} custom={1} className="text-xl text-text-light/60 max-w-3xl mx-auto leading-relaxed">
               Tell us about your room and let our experts craft a personalized design plan just for you. No commitments, just beautiful possibilities.
             </motion.p>
             <motion.div variants={fadeUp} custom={2}>
